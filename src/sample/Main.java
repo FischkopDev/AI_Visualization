@@ -11,7 +11,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(getClass().getResource("NNGUI.fxml"));
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("Simple construct of an AI | Timo Skrobanek");
         primaryStage.setScene(new Scene(root, 900, 500));
         primaryStage.show();
     }
