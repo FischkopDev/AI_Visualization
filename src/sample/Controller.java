@@ -11,13 +11,13 @@ import java.util.Random;
 public class Controller {
 
     @FXML
-    TextField input1, input2, input3, prefOutFalse, prefOutTrue;//Input for the input neuron
+    TextField input1, input2, input3, prefOutFalse, prefOutTrue, learnrate;//Input for the input neuron
 
     @FXML
     Label neuron1In, neuron1Out, neuron2In, neuron2Out, neuron3In, neuron3Out,
             neuron4In, neuron4Out, neuron5In, neuron5Out, neuron6In, neuron6Out,
             neuron7In, neuron7Out, neuron8In, neuron8Out,
-            finalOutputTrue,finalOutputFalse;
+            finalOutputTrue,finalOutputFalse, training;
 
     //Weights between input and hidden layer
     @FXML
@@ -35,6 +35,16 @@ public class Controller {
     private double[] weights4 = new double[3];
     private double[] weights5 = new double[3];
     private double[] weights6 = new double[3];
+
+    public void initialize(){
+        setRndInputs();
+        setRndWeights();
+    }
+
+    @FXML
+    protected void calculate(){
+        calculateNetwork();
+    }
 
     @FXML
     protected void stepForward(){
@@ -92,45 +102,83 @@ public class Controller {
 
     @FXML
     protected void setBackward(){
-        double outTrue = Double.parseDouble(prefOutTrue.getText());
-        double outFalse = Double.parseDouble(prefOutFalse.getText());
+        try {
+            double outTrue = Double.parseDouble(prefOutTrue.getText());
+            double outFalse = Double.parseDouble(prefOutFalse.getText());
 
-        System.out.println(outTrue-calculateNetwork());
-        while((outTrue-calculateNetwork()) > MathHandler.e) {
-            // if(backStep == 0){
-            System.out.println(weights4[0]);
-            double deltaWeight = MathHandler.deltaWeightOutput(outTrue, calculateNetwork());
-            for (int i = 0; i < weights4.length; i++) {
-                weights4[i] += deltaWeight;
-                weights5[i] += deltaWeight;
-                weights6[i] += deltaWeight;
+            MathHandler.e = Double.parseDouble(learnrate.getText());
 
-                System.out.println(weights4[i]);
+            backStep=0;
+
+            System.out.println(outTrue-calculateNetwork());
+
+            while(outTrue-calculateNetwork() > MathHandler.e) {
+                backStep++;
+                // if(backStep == 0){
+                System.out.println(weights4[0]);
+                double deltaWeight = MathHandler.deltaWeightOutput(outTrue, calculateNetwork());
+                for (int i = 0; i < weights4.length; i++) {
+                    weights4[i] += deltaWeight;
+                    weights5[i] += deltaWeight;
+                    weights6[i] += deltaWeight;
+
+                    System.out.println(weights4[i]);
+                }
+
+                //          if(backStep == 1) {
+                deltaWeight = MathHandler.deltaWeightHidden(weights1, outTrue, calculateNetwork());
+                for (int i = 0; i < weights1.length; i++) {
+                    weights1[i] += deltaWeight;
+                }
+
+                deltaWeight = MathHandler.deltaWeightHidden(weights2, outTrue, calculateNetwork());
+                for (int i = 0; i < weights2.length; i++) {
+                    weights2[i] += deltaWeight;
+                }
+
+                deltaWeight = MathHandler.deltaWeightHidden(weights3, outTrue, calculateNetwork());
+                for (int i = 0; i < weights3.length; i++) {
+                    weights3[i] += deltaWeight;
+                }
+                System.out.println("Finished backpropagation");
             }
 
-            //          if(backStep == 1) {
-            deltaWeight = MathHandler.deltaWeightHidden(weights1, outTrue, calculateNetwork());
-            for (int i = 0; i < weights1.length; i++) {
-                weights1[i] += deltaWeight;
+            while(outFalse-calculateNetwork() > MathHandler.e) {
+                // if(backStep == 0){
+                System.out.println(weights4[0]);
+                double deltaWeight = MathHandler.deltaWeightOutput(outFalse, calculateNetwork());
+                for (int i = 0; i < weights4.length; i++) {
+                    weights4[i] += deltaWeight;
+                    weights5[i] += deltaWeight;
+                    weights6[i] += deltaWeight;
+
+                    System.out.println(weights4[i]);
+                }
+
+                //          if(backStep == 1) {
+                deltaWeight = MathHandler.deltaWeightHidden(weights1, outFalse, calculateNetwork());
+                for (int i = 0; i < weights1.length; i++) {
+                    weights1[i] += deltaWeight;
+                }
+
+                deltaWeight = MathHandler.deltaWeightHidden(weights2, outFalse, calculateNetwork());
+                for (int i = 0; i < weights2.length; i++) {
+                    weights2[i] += deltaWeight;
+                }
+
+                deltaWeight = MathHandler.deltaWeightHidden(weights3, outFalse, calculateNetwork());
+                for (int i = 0; i < weights3.length; i++) {
+                    weights3[i] += deltaWeight;
+                }
+                System.out.println("Finished backpropagation");
             }
 
-            deltaWeight = MathHandler.deltaWeightHidden(weights2, outTrue, calculateNetwork());
-            for (int i = 0; i < weights2.length; i++) {
-                weights2[i] += deltaWeight;
-            }
-
-            deltaWeight = MathHandler.deltaWeightHidden(weights3, outTrue, calculateNetwork());
-            for (int i = 0; i < weights3.length; i++) {
-                weights3[i] += deltaWeight;
-            }
-            System.out.println("Finished backpropagation");
-            backStep = 0;
-            //return;
-            //  }
-            //}
+            training.setText("Training amount: " + backStep);
+            clearNetwork();
         }
-        clearNetwork();
-        backStep++;
+        catch(Exception e){
+            System.err.println("Empty fields!");
+        }
     }
 
     @FXML
@@ -144,17 +192,23 @@ public class Controller {
 
     @FXML
     protected void setRndWeights(){
+        System.out.println("Input/hidden weights:");
         for(int i= 0; i < weights1.length; i++){
             weights1[i] = Math.random();
             weights2[i] = Math.random();
             weights3[i] = Math.random();
+
+            System.out.println(weights1[i] + " " +weights2[i] + " " + weights3[i]);
         }
+
+        System.out.println("Hidden/Output weights:");
         for(int i= 0; i < weights4.length; i++){
             weights4[i] = Math.random();
             weights5[i] = Math.random();
             weights6[i] = Math.random();
-        }
 
+            System.out.println(weights4[i] + " " +weights5[i] + " " + weights6[i]);
+        }
     }
 
     private double calculateNetwork(){

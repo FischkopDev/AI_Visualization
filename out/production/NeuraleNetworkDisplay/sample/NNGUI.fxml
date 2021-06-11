@@ -9,8 +9,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane prefHeight="900.0" prefWidth="1600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1" fx:controller="sample.Controller">
+<AnchorPane prefHeight="900.0" prefWidth="1600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
    <children>
       <Circle fill="DODGERBLUE" layoutX="270.0" layoutY="320.0" radius="69.0" stroke="BLACK" strokeType="INSIDE" />
       <Circle fill="DODGERBLUE" layoutX="270.0" layoutY="504.0" radius="69.0" stroke="BLACK" strokeType="INSIDE" />
@@ -22,7 +21,7 @@
       <Circle fill="DODGERBLUE" layoutX="942.0" layoutY="616.0" radius="69.0" stroke="BLACK" strokeType="INSIDE" />
       <Pane prefHeight="170.0" prefWidth="1600.0" style="-fx-background-color: lightgray;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Button layoutX="69.0" layoutY="23.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="119.0" text="Forward">
+            <Button layoutX="69.0" layoutY="23.0" mnemonicParsing="false" onAction="#calculate" prefHeight="42.0" prefWidth="119.0" text="Forward">
                <font>
                   <Font size="19.0" />
                </font>
@@ -37,21 +36,31 @@
                   <Font size="19.0" />
                </font>
             </Button>
-            <Button layoutX="208.0" layoutY="85.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="163.0" text="Step-Backward">
+            <Button layoutX="208.0" layoutY="85.0" mnemonicParsing="false" onAction="#setBackward" prefHeight="42.0" prefWidth="163.0" text="Step-Backward">
                <font>
                   <Font size="19.0" />
                </font>
             </Button>
-            <Button layoutX="500.0" layoutY="23.0" mnemonicParsing="false" onAction="#setRndWeights" prefHeight="42.0" prefWidth="194.0" text="Random weights">
+            <Button layoutX="739.0" layoutY="23.0" mnemonicParsing="false" onAction="#setRndWeights" prefHeight="42.0" prefWidth="194.0" text="Random weights">
                <font>
                   <Font size="19.0" />
                </font>
             </Button>
-            <Button layoutX="500.0" layoutY="79.0" mnemonicParsing="false" onAction="#setRndInputs" prefHeight="42.0" prefWidth="194.0" text="Random inputs">
+            <Button layoutX="739.0" layoutY="73.0" mnemonicParsing="false" onAction="#setRndInputs" prefHeight="42.0" prefWidth="194.0" text="Random inputs">
                <font>
                   <Font size="19.0" />
                </font>
             </Button>
+            <Label fx:id="training" layoutX="390.0" layoutY="89.0" prefHeight="34.0" prefWidth="317.0" text="Training amount: ">
+               <font>
+                  <Font size="23.0" />
+               </font>
+            </Label>
+            <TextField fx:id="learnrate" layoutX="390.0" layoutY="22.0" prefHeight="44.0" prefWidth="170.0" promptText="Network error">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </TextField>
          </children>
       </Pane>
       <Line fx:id="weight11" endX="103.0" endY="1.0" layoutX="440.0" layoutY="320.0" startX="-100.0" strokeWidth="3.0" />
@@ -154,12 +163,12 @@
             <Font size="23.0" />
          </font>
       </Label>
-      <TextField fx:id="input11" layoutX="1210.0" layoutY="410.0" prefHeight="44.0" prefWidth="98.0" promptText="Pref Out">
+      <TextField fx:id="prefOutTrue" layoutX="1210.0" layoutY="410.0" prefHeight="44.0" prefWidth="98.0" promptText="Pref Out">
          <font>
             <Font size="20.0" />
          </font>
       </TextField>
-      <TextField fx:id="input111" layoutX="1210.0" layoutY="586.0" prefHeight="44.0" prefWidth="98.0" promptText="Pref Out">
+      <TextField fx:id="prefOutFalse" layoutX="1210.0" layoutY="586.0" prefHeight="44.0" prefWidth="98.0" promptText="Pref Out">
          <font>
             <Font size="20.0" />
          </font>
